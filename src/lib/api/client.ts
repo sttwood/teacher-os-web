@@ -6,12 +6,26 @@ import axios, {
 import { env } from "@/lib/env";
 import { useAuthStore } from "@/features/auth/stores/auth.store";
 
+export type ApiMeta = {
+  page?: number;
+  limit?: number;
+  total?: number;
+  totalPages?: number;
+  [key: string]: unknown;
+};
+
+export type ApiSuccessResponse<T> = {
+  status: "success";
+  data: T;
+  meta?: ApiMeta;
+};
+
 export type ApiErrorResponse = {
+  status: "failed";
   error?: {
     code?: string;
     message?: string;
   };
-  message?: string;
 };
 
 export class ApiError extends Error {
@@ -49,21 +63,24 @@ async function refreshAccessToken(): Promise<string | null> {
   }
 
   try {
-    const response = await axios.post(`${env.apiUrl}/auth/refresh`, {
+    const response = await axios.post<
+      ApiSuccessResponse<{
+        message: string;
+        accessToken: string;
+        refreshToken: string;
+      }>
+    >(`${env.apiUrl}/auth/refresh`, {
       refreshToken,
     });
 
-    const data = response.data as {
-      accessToken: string;
-      refreshToken: string;
-    };
+    const payload = response.data.data;
 
     updateTokens({
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
+      accessToken: payload.accessToken,
+      refreshToken: payload.refreshToken,
     });
 
-    return data.accessToken;
+    return payload.accessToken;
   } catch {
     clearAuth();
     return null;
@@ -131,7 +148,6 @@ export function toApiError(error: unknown): ApiError {
     const code = axiosError.response?.data?.error?.code || "UNKNOWN_ERROR";
     const message =
       axiosError.response?.data?.error?.message ||
-      axiosError.response?.data?.message ||
       axiosError.message ||
       "Request failed";
 

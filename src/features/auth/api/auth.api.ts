@@ -1,4 +1,4 @@
-import { apiClient, toApiError } from "@/lib/api/client";
+import { apiClient, toApiError, type ApiSuccessResponse } from "@/lib/api/client";
 import type {
   ForgotPasswordRequest,
   ForgotPasswordResponse,
@@ -22,11 +22,11 @@ import type {
 export const authApi = {
   async register(payload: RegisterRequest) {
     try {
-      const { data } = await apiClient.post<RegisterResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<RegisterResponse>>(
         "/auth/register",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -34,11 +34,11 @@ export const authApi = {
 
   async login(payload: LoginRequest) {
     try {
-      const { data } = await apiClient.post<LoginResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<LoginResponse>>(
         "/auth/login",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -46,8 +46,8 @@ export const authApi = {
 
   async me() {
     try {
-      const { data } = await apiClient.get<MeResponse>("/auth/me");
-      return data;
+      const { data } = await apiClient.get<ApiSuccessResponse<MeResponse>>("/auth/me");
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -55,11 +55,11 @@ export const authApi = {
 
   async verifyEmailConfirm(payload: VerifyEmailConfirmRequest) {
     try {
-      const { data } = await apiClient.post<VerifyEmailConfirmResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<VerifyEmailConfirmResponse>>(
         "/auth/verifyEmail/confirm",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -67,11 +67,11 @@ export const authApi = {
 
   async verifyEmailResend(payload: VerifyEmailResendRequest) {
     try {
-      const { data } = await apiClient.post<VerifyEmailResendResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<VerifyEmailResendResponse>>(
         "/auth/verifyEmail/resend",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -79,11 +79,11 @@ export const authApi = {
 
   async forgotPassword(payload: ForgotPasswordRequest) {
     try {
-      const { data } = await apiClient.post<ForgotPasswordResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<ForgotPasswordResponse>>(
         "/auth/forgotPassword",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -91,11 +91,11 @@ export const authApi = {
 
   async resetPassword(payload: ResetPasswordRequest) {
     try {
-      const { data } = await apiClient.post<ResetPasswordResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<ResetPasswordResponse>>(
         "/auth/resetPassword",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -103,11 +103,11 @@ export const authApi = {
 
   async refresh(payload: RefreshTokenRequest) {
     try {
-      const { data } = await apiClient.post<RefreshTokenResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<RefreshTokenResponse>>(
         "/auth/refresh",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
@@ -115,11 +115,11 @@ export const authApi = {
 
   async logout(payload: LogoutRequest) {
     try {
-      const { data } = await apiClient.post<LogoutResponse>(
+      const { data } = await apiClient.post<ApiSuccessResponse<LogoutResponse>>(
         "/auth/logout",
         payload
       );
-      return data;
+      return data.data;
     } catch (error) {
       throw toApiError(error);
     }
