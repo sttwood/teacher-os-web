@@ -1,6 +1,11 @@
 export type Plan = {
   id: string;
   ownerId: string;
+  subjectId?: string;
+  learningUnitId?: string;
+  lessonNo: number;
+  lessonTitle: string;
+  lessonHours: number;
   title: string;
   subjectGroup: string;
   gradeLevel: string;
@@ -30,13 +35,12 @@ export type ListPlansResult = {
 };
 
 export type CreatePlanRequest = {
+  subjectId: string;
+  learningUnitId: string;
+  lessonNo: number;
+  lessonTitle: string;
+  lessonHours: number;
   title: string;
-  subjectGroup: string;
-  gradeLevel: string;
-  semester: string;
-  academicYear: string;
-  schoolName: string;
-  teacherName: string;
 };
 
 export type CreatePlanResult = Plan;
