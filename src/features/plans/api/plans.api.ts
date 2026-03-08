@@ -29,7 +29,6 @@ export const plansApi = {
         "/plans",
         payload
       );
-
       return data.data;
     } catch (error) {
       throw toApiError(error);

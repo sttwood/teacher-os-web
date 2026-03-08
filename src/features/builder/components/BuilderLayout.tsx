@@ -5,6 +5,10 @@ import { BuilderCanvas } from "@/features/builder/components/BuilderCanvas";
 import { InspectorPanel } from "@/features/builder/components/InspectorPanel";
 import { useBuilderStore } from "@/features/builder/stores/builder.store";
 import { builderApi } from "../api/builder.api";
+import { useState } from "react";
+import { builderExportApi } from "@/features/builder/api/builder-export.api";
+import { downloadBlobFile } from "@/features/builder/utils/download-file";
+import { ApiError } from "@/lib/api/client";
 
 export function BuilderLayout() {
   const planId = useBuilderStore((state) => state.planId);
@@ -16,6 +20,9 @@ export function BuilderLayout() {
   const setLastSavedAt = useBuilderStore((state) => state.setLastSavedAt);
   const markDirty = useBuilderStore((state) => state.markDirty);
 
+  const [isExportingDOCX, setIsExportingDOCX] = useState(false);
+  const [exportError, setExportError] = useState("");
+
   const handleManualSave = async () => {
     try {
       setSaveStatus("saving");
@@ -25,6 +32,23 @@ export function BuilderLayout() {
       setLastSavedAt(new Date().toISOString());
     } catch {
       setSaveStatus("error");
+    }
+  };
+
+  const handleExportDOCX = async () => {
+    if (!planId) return;
+
+    try {
+      setIsExportingDOCX(true);
+      setExportError("");
+
+      const blob = await builderExportApi.exportDOCX(planId);
+      downloadBlobFile(blob, `lesson-plan-${planId}.docx`);
+    } catch (error) {
+      const apiError = error as ApiError;
+      setExportError(apiError.message);
+    } finally {
+      setIsExportingDOCX(false);
     }
   };
 
@@ -58,6 +82,20 @@ export function BuilderLayout() {
             >
               บันทึก
             </button>
+
+            <div className="flex flex-col gap-1">
+              <button
+                type="button"
+                onClick={() => void handleExportDOCX()}
+                disabled={!planId || isExportingDOCX}
+                className="rounded-xl border bg-white px-4 py-2 text-sm disabled:opacity-50"
+              >
+                {isExportingDOCX ? "กำลังส่งออก DOCX..." : "ส่งออก DOCX"}
+              </button>
+              {exportError && (
+                <p className="mt-2 text-sm text-red-600">{exportError}</p>
+              )}
+            </div>
           </div>
         </div>
       </header>
