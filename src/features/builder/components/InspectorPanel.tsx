@@ -3,6 +3,7 @@
 import { useBuilderStore } from "@/features/builder/stores/builder.store";
 
 export function InspectorPanel() {
+  const planMeta = useBuilderStore((state) => state.planMeta);
   const widgets = useBuilderStore((state) => state.widgets);
   const selectedWidgetId = useBuilderStore((state) => state.selectedWidgetId);
   const isDirty = useBuilderStore((state) => state.isDirty);
@@ -17,6 +18,16 @@ export function InspectorPanel() {
         <h2 className="text-lg font-semibold">รายละเอียดวิดเจ็ต</h2>
         <p className="mt-1 text-sm text-neutral-500">
           ตรวจสอบสถานะและรายละเอียดของวิดเจ็ตที่เลือก
+        </p>
+      </div>
+
+      <div className="mb-4 rounded-2xl border bg-neutral-50 p-4">
+        <p className="text-xs uppercase tracking-wide text-neutral-500">
+          แผนการจัดการเรียนรู้
+        </p>
+        <p className="mt-2 text-sm font-medium">{planMeta?.title || "-"}</p>
+        <p className="mt-1 text-xs text-neutral-500">
+          {planMeta?.lessonTitle || "-"}
         </p>
       </div>
 

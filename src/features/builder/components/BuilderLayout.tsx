@@ -12,6 +12,7 @@ import { ApiError } from "@/lib/api/client";
 
 export function BuilderLayout() {
   const planId = useBuilderStore((state) => state.planId);
+  const planMeta = useBuilderStore((state) => state.planMeta);
   const widgets = useBuilderStore((state) => state.widgets);
   const isDirty = useBuilderStore((state) => state.isDirty);
   const saveStatus = useBuilderStore((state) => state.saveStatus);
@@ -60,8 +61,36 @@ export function BuilderLayout() {
             <h1 className="text-xl font-semibold">
               ตัวสร้างแผนการจัดการเรียนรู้
             </h1>
+
             <p className="mt-1 text-sm text-neutral-500">
-              รหัสแผน: {planId ?? "-"} • จำนวนวิดเจ็ต: {widgets.length}
+              {planMeta?.title || "ยังไม่มีชื่อแผน"}
+            </p>
+
+            <div className="mt-2 flex flex-wrap gap-2 text-xs text-neutral-500">
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                รายวิชา: {planMeta?.subjectGroup || "-"}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                ชั้น: {planMeta?.gradeLevel || "-"}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                แผนที่: {planMeta?.lessonNo || "-"}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                ชื่อคาบ: {planMeta?.lessonTitle || "-"}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                ชั่วโมง: {planMeta?.lessonHours || "-"}
+              </span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1">
+                ภาคเรียน: {planMeta?.semester || "-"} / ปี{" "}
+                {planMeta?.academicYear || "-"}
+              </span>
+            </div>
+
+            <p className="mt-2 text-xs text-neutral-400">
+              โรงเรียน: {planMeta?.schoolName || "-"} • ครูผู้สอน:{" "}
+              {planMeta?.teacherName || "-"}
             </p>
           </div>
 

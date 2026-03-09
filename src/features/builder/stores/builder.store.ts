@@ -5,6 +5,7 @@ import type {
   BuilderWidget,
   BuilderWidgetType,
 } from "@/features/builder/types/builder.type";
+import type { Plan } from "@/features/plans/types/plan.type";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
@@ -95,6 +96,7 @@ function reindexWidgets(widgets: BuilderWidget[]): BuilderWidget[] {
 
 type BuilderState = {
   planId: string | null;
+  planMeta: Plan | null;
   widgets: BuilderWidget[];
   selectedWidgetId: string | null;
   isDirty: boolean;
@@ -102,6 +104,7 @@ type BuilderState = {
   lastSavedAt: string | null;
 
   setPlanId: (planId: string) => void;
+  setPlanMeta: (plan: Plan | null) => void;
   setWidgets: (widgets: BuilderWidget[]) => void;
   selectWidget: (widgetId: string | null) => void;
   markDirty: (value: boolean) => void;
@@ -118,6 +121,7 @@ type BuilderState = {
 
 export const useBuilderStore = create<BuilderState>((set, get) => ({
   planId: null,
+  planMeta: null,
   widgets: [],
   selectedWidgetId: null,
   isDirty: false,
@@ -125,6 +129,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   lastSavedAt: null,
 
   setPlanId: (planId) => set({ planId }),
+  setPlanMeta: (planMeta) => set({ planMeta }),
 
   setWidgets: (widgets) =>
     set({
