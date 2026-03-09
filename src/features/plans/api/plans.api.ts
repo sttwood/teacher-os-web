@@ -34,4 +34,15 @@ export const plansApi = {
       throw toApiError(error);
     }
   },
+
+  async getById(planId: string): Promise<Plan> {
+    try {
+      const { data } = await apiClient.get<ApiSuccessResponse<Plan>>(
+        `/plans/${planId}`
+      );
+      return data.data;
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
 };
