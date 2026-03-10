@@ -117,6 +117,11 @@ type BuilderState = {
   toggleCollapseWidget: (widgetId: string) => void;
   moveWidgetUp: (widgetId: string) => void;
   moveWidgetDown: (widgetId: string) => void;
+  updateWidgetTitle: (widgetId: string, title: string) => void;
+  updateWidgetContent: (
+    widgetId: string, 
+    contentJSON: Record<string, unknown>
+  ) => void;
 };
 
 export const useBuilderStore = create<BuilderState>((set, get) => ({
@@ -248,6 +253,30 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     set({
       widgets: reindexWidgets(nextWidgets),
       selectedWidgetId: widgetId,
+      isDirty: true,
+      saveStatus: "idle",
+    });
+  },
+
+  updateWidgetTitle: (widgetId, title) => {
+    const { widgets } = get();
+
+    set({
+      widgets: widgets.map((widget) =>
+        widget.id === widgetId ? { ...widget, title } : widget
+      ),
+      isDirty: true,
+      saveStatus: "idle",
+    });
+  },
+
+  updateWidgetContent: (widgetId, contentJSON) => {
+    const { widgets } = get();
+
+    set({
+      widgets: widgets.map((widget) =>
+        widget.id === widgetId ? { ...widget, contentJSON } : widget
+      ),
       isDirty: true,
       saveStatus: "idle",
     });
